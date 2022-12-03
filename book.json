@@ -1,0 +1,8 @@
+{
+	"title": "Summary",
+	"plugins" : [
+	],
+	"pluginsConfig": {
+	},
+	"ignores" : ["_book", "node_modules"]
+}
