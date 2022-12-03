@@ -4,5 +4,6 @@
 	],
 	"pluginsConfig": {
 	},
-	"ignores" : ["_book", "node_modules"]
+	"ignores" : ["_book", "node_modules"],
+	"disableTitleFormatting": true
 }
