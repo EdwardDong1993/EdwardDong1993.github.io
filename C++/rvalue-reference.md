@@ -1,15 +1,10 @@
----
-title: 右值引用
-category: C++
-order: 1
----
+## 1 左值与右值
 
-## 1 左值，右值
 如下例所示：
 ```cpp
 class test {
 public:
-    test() {};
+    test() = default;
     int foo{0};
     int bar{0};
 };
@@ -22,18 +17,21 @@ test t = test();
 总结来说：**有地址的变量就是左值，没有地址的字面值、临时值就是右值。**
 
 ## 2 左值引用
+
 左值引用可以指向左值，但不能指向右值（引用是变量的别名，由于右值没有地址，没法被修改，所以普通左值引用无法指向右值）：
 ```cpp
 int a = 42;
 int &r1 = a;    // ok
 int &r2 = 42;   // error
 ```
+
 但 const 左值引用可以指向右值，因为不会修改指向值：
 ```cpp
 const int &r2 = 42; // ok
 ```
 
 ## 3 右值引用
+
 右值引用可以指向右值，但不能指向左值：
 ```cpp
 int a = 42;
@@ -163,8 +161,6 @@ void flip(F f, T1 &&t1, T2 &&t2) {
 }
 ```
 
-
-
-
 ## 参考
 https://zhuanlan.zhihu.com/p/335994370
+《C++ primer》
