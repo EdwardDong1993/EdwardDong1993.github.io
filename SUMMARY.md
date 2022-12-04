@@ -5,3 +5,4 @@
   * [value-categories](C++/value-categories.md)
   * [rvalue-reference](C++/rvalue-reference.md)
   * [RAII](C++/RAII.md)
+  * [CRTP](C++/CRTP.md)
