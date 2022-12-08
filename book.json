@@ -1,6 +1,15 @@
 {
 	"title": "C++ zero",
+	"author" : "Edward Dong",
 	"plugins" : [
+		"-search",
+		"back-to-top-button",
+		"expandable-chapters-small",
+		"code",
+		"-lunr",
+		"-search",
+		"search-pro",
+		"splitter"
 	],
 	"pluginsConfig": {
 	},

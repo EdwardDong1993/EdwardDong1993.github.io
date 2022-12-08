@@ -162,5 +162,5 @@ void flip(F f, T1 &&t1, T2 &&t2) {
 ```
 
 ## 参考
-https://zhuanlan.zhihu.com/p/335994370
-《C++ primer》
+- https://zhuanlan.zhihu.com/p/335994370
+- 《C++ primer》
