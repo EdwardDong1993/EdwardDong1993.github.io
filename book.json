@@ -9,7 +9,8 @@
 		"-lunr",
 		"-search",
 		"search-pro",
-		"splitter"
+		"splitter",
+		"auto-scroll-table"
 	],
 	"pluginsConfig": {
 	},
