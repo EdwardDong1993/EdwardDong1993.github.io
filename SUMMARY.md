@@ -9,6 +9,8 @@
 - [分布式系统](distrabution/README.md)
   * [论文学习笔记](distrabution/thesis/README.md)
     * [MapReduce 笔记](distrabution/thesis/mapreduce.md)
+- [存储](storage/README.md)
+  * [块存储、文件存储、对象存储](storage/storage-types.md)
 - [踩过的坑](bugs/README.md)
   * [智能指针循环引用](bugs/circular-referance.md)
   * [lambda尝试修改值捕获的变量](bugs/lambda-mutable.md)
