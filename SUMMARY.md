@@ -6,6 +6,7 @@
   * [rvalue-reference](C++/rvalue-reference.md)
   * [RAII](C++/RAII.md)
   * [CRTP](C++/CRTP.md)
+  * [RVO](C++/RVO.md)
 - [分布式系统](distrabution/README.md)
   * [论文学习笔记](distrabution/thesis/README.md)
     * [MapReduce 笔记](distrabution/thesis/mapreduce.md)
