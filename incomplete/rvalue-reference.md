@@ -1,22 +1,4 @@
-## 1 左值与右值
-
-如下例所示：
-```cpp
-class test {
-public:
-    test() = default;
-    int foo{0};
-    int bar{0};
-};
- 
-test t = test();
-```
-
-其中，`t` 可以通过 `&` 取地址，位于等号左边，所以 `t` 是左值；而 `test()` 是个临时值，没法通过 `&` 取地址，位于等号右边，所以 `test()` 是个右值。
-
-总结来说：**有地址的变量就是左值，没有地址的字面值、临时值就是右值。**
-
-## 2 左值引用
+## 1 左值引用
 
 左值引用可以指向左值，但不能指向右值（引用是变量的别名，由于右值没有地址，没法被修改，所以普通左值引用无法指向右值）：
 ```cpp
@@ -30,7 +12,7 @@ int &r2 = 42;   // error
 const int &r2 = 42; // ok
 ```
 
-## 3 右值引用
+## 2 右值引用
 
 右值引用可以指向右值，但不能指向左值：
 ```cpp
@@ -39,20 +21,46 @@ int &&rr1 = a;      // error
 int &&rr2 = 42;     // ok
 ```
 
-如果想要使右值引用指向某个左值，可以先使用 `std::move` 将左值变为右值，再将右值引用指向这个右值：
+如果想要使右值引用指向某个左值，可以使用 `std::move` 将左值强制变为右值引用：
 ```cpp
 int a = 42;
 int &&rr = std::move(a);    // ok
 ```
 
-事实上 `std::move` 唯一的功能是把输入的参数强制转化为右值，等同于 `static_cast<T&&>(lvalue)` 类型转换，后续将进行介绍。
+事实上 `std::move` 唯一的功能是就是把输入的参数强制转化为右值引用，具体实现如下：
+```cpp
+  /**
+   *  @brief  Convert a value to an rvalue.
+   *  @param  __t  A thing of arbitrary type.
+   *  @return The parameter cast to an rvalue-reference to allow moving it.
+  */
+  template<typename _Tp>
+    constexpr typename std::remove_reference<_Tp>::type&&
+    move(_Tp&& __t) noexcept
+    { return static_cast<typename std::remove_reference<_Tp>::type&&>(__t); }
 
-## 4 特点
+```
+
+## 3 特点
 
 - 被 **声明** 出来的左值引用和右值引用都是左值，因为被声明出的引用都有地址；
 - 作为函数形参时，右值引用更灵活，因为右值引用可以直接指向右值，也可以通过 `std::move` 指向左值；虽然 const 左值引用也可以做到左右值都接受，但它无法进行修改，有一定局限性；
 
-## 5 引用折叠
+右值引用实现了如下两个功能：
+- 移动语义（Move Semantics）
+- 完美转发（Perfect Forward）
+
+## 3 移动语义
+
+可以为类定义移动构造函数（move constructor）和移动赋值（move assignment）运算符：
+```cpp
+X(X&&);
+X& operator=(X&&);
+```
+
+上述中入参均为右值引用，表示该入参中的资源可以被“窃取”走，实现资源的移动，取代复制操作，避免了资源消耗，而由于输入参数中包含的值可能已经被移动走了，后续不应当再使用该变量。
+
+## 4 引用折叠
 
 **规则 1**：将一个左值传递给函数的右值引用参数，且此右值引用指向模板类型参数（如 T&&），编译器推断模板类型参数为实参的左值引用类型：
 ```cpp
@@ -72,23 +80,7 @@ f(i);
 - 如果一个函数参数是一个指向模板参数的右值引用（T&&），则它可以被绑定到一个左值；
 - 如果实参是一个左值，则推断出的模板实参将会是一个左值引用，且函数参数将被实例化为一个普通的左值引用参数（T&）；
 
-## 6 std::move
-
-其功能为将输入的参数转换成右值，源代码如下：
-```cpp
-  /**
-   *  @brief  Convert a value to an rvalue.
-   *  @param  __t  A thing of arbitrary type.
-   *  @return The parameter cast to an rvalue-reference to allow moving it.
-  */
-  template<typename _Tp>
-    constexpr typename std::remove_reference<_Tp>::type&&
-    move(_Tp&& __t) noexcept
-    { return static_cast<typename std::remove_reference<_Tp>::type&&>(__t); }
-
-```
-
-## 6 完美转发
+## 5 完美转发
 
 某些函数需要将实参连同类型不变的转发给其它函数，需要保持被转发的实参的所有性质，包括是否为 const 以及左值还是右值。
 
@@ -162,5 +154,6 @@ void flip(F f, T1 &&t1, T2 &&t2) {
 ```
 
 ## 参考
-https://zhuanlan.zhihu.com/p/335994370
-《C++ primer》
+- https://blog.csdn.net/xhtchina/article/details/120619910
+- https://zhuanlan.zhihu.com/p/335994370
+- 《C++ primer》

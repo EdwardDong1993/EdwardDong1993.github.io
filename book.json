@@ -1,9 +1,23 @@
 {
 	"title": "C++ zero",
+	"author" : "Edward Dong",
 	"plugins" : [
+		"-search",
+		"back-to-top-button",
+		"expandable-chapters-small",
+		"code",
+		"-lunr",
+		"search-pro",
+		"splitter",
+		"auto-scroll-table",
+		"emphasize",
+		"alerts"
 	],
 	"pluginsConfig": {
 	},
-	"ignores" : ["_book", "node_modules"],
+	"ignores" : [
+		"_book",
+		"node_modules"
+	],
 	"disableTitleFormatting": true
 }
