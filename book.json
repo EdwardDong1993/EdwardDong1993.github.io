@@ -1,7 +1,7 @@
 {
 	"title": "C++ zero",
-	"author" : "Edward Dong",
-	"plugins" : [
+	"author": "Edward Dong",
+	"plugins": [
 		"-search",
 		"back-to-top-button",
 		"expandable-chapters-small",
@@ -13,9 +13,8 @@
 		"emphasize",
 		"alerts"
 	],
-	"pluginsConfig": {
-	},
-	"ignores" : [
+	"pluginsConfig": {},
+	"ignores": [
 		"_book",
 		"node_modules"
 	],
