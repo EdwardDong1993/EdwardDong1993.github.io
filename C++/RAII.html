@@ -1,0 +1,376 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>RAII · C++ zero</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="Edward Dong">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-auto-scroll-table/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="value-categories.html" />
+    
+    
+    <link rel="prev" href="./" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Home
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    C++
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.2.1" data-path="RAII.html">
+            
+                <a href="RAII.html">
+            
+                    
+                    RAII
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="value-categories.html">
+            
+                <a href="value-categories.html">
+            
+                    
+                    值类别
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="rvalue-reference.html">
+            
+                <a href="rvalue-reference.html">
+            
+                    
+                    右值引用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >RAII</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <p><strong>&#x8D44;&#x6E90;&#x7533;&#x8BF7;&#x5373;&#x521D;&#x59CB;&#x5316;&#xFF08;Resource Acquisition Is Initialization&#xFF0C;RAII&#xFF09;</strong>&#xFF0C;&#x662F; C++ &#x7684;&#x4E00;&#x79CD; <strong>&#x7BA1;&#x7406;&#x8D44;&#x6E90;</strong>&#x3001;<strong>&#x907F;&#x514D;&#x6CC4;&#x6F0F;</strong> &#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5176;&#x505A;&#x6CD5;&#x662F;&#xFF1A;</p>
+<ol>
+<li>&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x5728;&#x5176;&#x6784;&#x9020;&#x65F6;&#x83B7;&#x53D6;&#x5BF9;&#x5E94;&#x7684;&#x8D44;&#x6E90;&#xFF1B;</li>
+<li>&#x5728;&#x5BF9;&#x8C61;&#x751F;&#x547D;&#x671F;&#x5185;&#x63A7;&#x5236;&#x5BF9;&#x8D44;&#x6E90;&#x7684;&#x8BBF;&#x95EE;&#xFF0C;&#x4F7F;&#x4E4B;&#x59CB;&#x7EC8;&#x4FDD;&#x6301;&#x6709;&#x6548;&#xFF1B;</li>
+<li>&#x6700;&#x540E;&#x5728;&#x5BF9;&#x8C61;&#x6790;&#x6784;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x91CA;&#x653E;&#x6784;&#x9020;&#x65F6;&#x83B7;&#x53D6;&#x7684;&#x8D44;&#x6E90;&#xFF1B;</li>
+</ol>
+<p>&#x56E0;&#x6B64; RAII &#x4E5F;&#x53EF;&#x4EE5;&#x8BF4;&#x662F;&#x4E00;&#x79CD;&#x5229;&#x7528; <strong>&#x5BF9;&#x8C61;&#x751F;&#x547D;&#x5468;&#x671F;</strong> &#x6765;&#x63A7;&#x5236;&#x7A0B;&#x5E8F;&#x8D44;&#x6E90;&#x7684;&#x6280;&#x672F;&#xFF0C;&#x8D44;&#x6E90;&#x7684;&#x6709;&#x6548;&#x671F;&#x4E0E;&#x6301;&#x6709;&#x8D44;&#x6E90;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x671F;&#x4E25;&#x683C;&#x7ED1;&#x5B9A;&#x3002;</p>
+<p>&#x7CFB;&#x7EDF;&#x7684;&#x8D44;&#x6E90;&#x4E0D;&#x5177;&#x6709;&#x81EA;&#x52A8;&#x91CA;&#x653E;&#x7684;&#x529F;&#x80FD;&#xFF0C;&#x4F46;&#x7531;&#x4E8E; C++ &#x4E2D;&#x7684;&#x7C7B;&#x5177;&#x6709;&#x81EA;&#x52A8;&#x8C03;&#x7528;&#x6790;&#x6784;&#x51FD;&#x6570;&#x7684;&#x529F;&#x80FD;&#xFF0C;&#x6240;&#x4EE5;&#x5982;&#x679C;&#x628A;&#x8D44;&#x6E90;&#x7528;&#x7C7B;&#x8FDB;&#x884C;&#x5C01;&#x88C5;&#x8D77;&#x6765;&#xFF0C;&#x5BF9;&#x8D44;&#x6E90;&#x64CD;&#x4F5C;&#x90FD;&#x5C01;&#x88C5;&#x5728;&#x7C7B;&#x7684;&#x5185;&#x90E8;&#xFF0C;&#x5728;&#x6790;&#x6784;&#x51FD;&#x6570;&#x4E2D;&#x8FDB;&#x884C;&#x91CA;&#x653E;&#x8D44;&#x6E90;&#xFF0C;&#x5F53;&#x5B9A;&#x4E49;&#x7684;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x7684;&#x751F;&#x547D;&#x7ED3;&#x675F;&#x65F6;&#xFF0C;&#x5B83;&#x7684;&#x6790;&#x6784;&#x51FD;&#x6570;&#x5C31;&#x4F1A;&#x81EA;&#x52A8;&#x7684;&#x88AB;&#x8C03;&#x7528;&#xFF0C;&#x5176;&#x751F;&#x547D;&#x5468;&#x671F;&#x662F;&#x7531;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x6765;&#x7BA1;&#x7406;&#xFF0C;&#x65E0;&#x9700;&#x4EBA;&#x5DE5;&#x4ECB;&#x5165;&#x3002;</p>
+<p>&#x4EE5; <code>lock_guard</code> &#x4E3A;&#x4F8B;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x52A0;&#x9501;&#x64CD;&#x4F5C;&#x8D44;&#x6E90;&#xFF0C;&#x800C;&#x4E0D;&#x9700;&#x8981;&#x624B;&#x52A8;&#x89E3;&#x9501;&#xFF0C;&#x9501;&#x81EA;&#x52A8;&#x91CA;&#x653E;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-built_in">std</span>::mutex m;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">fn</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">std</span>::lock_guard&lt;<span class="hljs-built_in">std</span>::mutex&gt; guard(m);
+    do_something();
+    <span class="hljs-comment">// &#x6267;&#x884C;&#x5B8C;&#x6210;&#x540E;&#xFF0C;lock_guard &#x4F1A;&#x88AB;&#x6790;&#x6784;&#xFF0C;&#x4ECE;&#x800C; mutex &#x4E5F;&#x4F1A;&#x88AB;&#x91CA;&#x653E;</span>
+}
+</code></pre>
+<p><code>lock_guard</code> &#x7684;&#x6E90;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-cpp">  /** @brief A simple scoped lock type.
+   *
+   * A lock_guard controls mutex ownership within a scope, releasing
+   * ownership in the destructor.
+   */
+  template&lt;typename _Mutex&gt;
+    class lock_guard
+    {
+    public:
+      typedef _Mutex mutex_type;
+
+      explicit lock_guard(mutex_type&amp; __m) : _M_device(__m)
+      { _M_device.lock(); }
+
+      lock_guard(mutex_type&amp; __m, adopt_lock_t) noexcept : _M_device(__m)
+      { } // calling thread owns mutex
+
+      ~lock_guard()
+      { _M_device.unlock(); }
+
+      lock_guard(const lock_guard&amp;) = delete;
+      lock_guard&amp; operator=(const lock_guard&amp;) = delete;
+
+    private:
+      mutex_type&amp;  _M_device;
+    };
+</code></pre>
+<p><code>lock_guard</code> &#x6784;&#x9020;&#x65F6;&#xFF0C;&#x4F1A;&#x521D;&#x59CB;&#x5316;&#x5185;&#x90E8;&#x5B57;&#x6BB5;&#x6267;&#x884C;&#x52A0;&#x9501;&#x64CD;&#x4F5C;&#xFF1B;&#x6790;&#x6784;&#x65F6;&#xFF0C;&#x4F1A;&#x6307;&#x5411;&#x89E3;&#x9501;&#x64CD;&#x4F5C;&#xFF0C;&#x6240;&#x4EE5;&#x501F;&#x52A9;&#x8FD9;&#x4E2A;&#x7C7B;&#xFF0C;&#x53EF;&#x4EE5;&#x4E0D;&#x9700;&#x8981;&#x5173;&#x6CE8;&#x89E3;&#x9501;&#x7684;&#x64CD;&#x4F5C;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="./" class="navigation navigation-prev " aria-label="Previous page: C++">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="value-categories.html" class="navigation navigation-next " aria-label="Next page: 值类别">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"RAII","level":"1.2.1","depth":2,"next":{"title":"值类别","level":"1.2.2","depth":2,"path":"C++/value-categories.md","ref":"C++/value-categories.md","articles":[]},"previous":{"title":"C++","level":"1.2","depth":1,"path":"C++/README.md","ref":"C++/README.md","articles":[{"title":"RAII","level":"1.2.1","depth":2,"path":"C++/RAII.md","ref":"C++/RAII.md","articles":[]},{"title":"值类别","level":"1.2.2","depth":2,"path":"C++/value-categories.md","ref":"C++/value-categories.md","articles":[]},{"title":"右值引用","level":"1.2.3","depth":2,"path":"C++/rvalue-reference.md","ref":"C++/rvalue-reference.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["-search","back-to-top-button","expandable-chapters-small","code","-lunr","search-pro","splitter","auto-scroll-table","emphasize","alerts"],"ignores":["_book","node_modules"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"emphasize":{},"splitter":{},"search-pro":{},"auto-scroll-table":{},"code":{"copyButtons":true},"fontsettings":{"theme":"sepia","family":"serif","size":1},"highlight":{},"back-to-top-button":{},"alerts":{},"expandable-chapters-small":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Edward Dong","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"disableTitleFormatting":true,"variables":{},"title":"C++ zero","gitbook":"*"},"file":{"path":"C++/RAII.md","mtime":"2024-02-12T12:45:54.788Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-02-12T12:46:38.136Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-auto-scroll-table/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

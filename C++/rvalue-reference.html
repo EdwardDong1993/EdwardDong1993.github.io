@@ -1,0 +1,497 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>右值引用 · C++ zero</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="Edward Dong">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-pro/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-auto-scroll-table/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-emphasize/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-alerts/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="value-categories.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Home
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    C++
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="RAII.html">
+            
+                <a href="RAII.html">
+            
+                    
+                    RAII
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="value-categories.html">
+            
+                <a href="value-categories.html">
+            
+                    
+                    值类别
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2.3" data-path="rvalue-reference.html">
+            
+                <a href="rvalue-reference.html">
+            
+                    
+                    右值引用
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >右值引用</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="0-&#x5173;&#x4E8E;&#x503C;&#x7C7B;&#x522B;">0 &#x5173;&#x4E8E;&#x503C;&#x7C7B;&#x522B;</h2>
+<p><strong>&#x503C;&#x7C7B;&#x522B;&#xFF08;value category&#xFF09;</strong> &#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x5373;&#x5E73;&#x65F6;&#x6240;&#x8BF4;&#x7684; <strong>&#x5DE6;&#x503C;</strong> &#x548C; <strong>&#x53F3;&#x503C;</strong>&#xFF0C;C++ &#x7684;&#x8868;&#x8FBE;&#x5F0F;&#x8981;&#x4E48;&#x662F;&#x5DE6;&#x503C;&#xFF0C;&#x8981;&#x4E48;&#x662F;&#x53F3;&#x503C;&#x3002;</p>
+<ul>
+<li>&#x5F53;&#x5BF9;&#x8C61;&#x662F;&#x5DE6;&#x503C;&#x65F6;&#xFF0C;&#x7528;&#x7684;&#x662F;&#x5BF9;&#x8C61;&#x7684;&#x8EAB;&#x4EFD;&#xFF08;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;&#xFF09;&#xFF0C;&#x4F8B;&#x5982;&#x666E;&#x901A;&#x53D8;&#x91CF;&#xFF1B;</li>
+<li>&#x5F53;&#x5BF9;&#x8C61;&#x662F;&#x53F3;&#x503C;&#x65F6;&#xFF0C;&#x7528;&#x7684;&#x662F;&#x5BF9;&#x8C61;&#x7684;&#x503C;&#xFF08;&#x5185;&#x5BB9;&#xFF09;&#xFF0C;&#x4F8B;&#x5982;&#x5B57;&#x9762;&#x5E38;&#x91CF;&#x3001;&#x8868;&#x8FBE;&#x5F0F;&#x6C42;&#x503C;&#x8FC7;&#x7A0B;&#x4E2D;&#x521B;&#x5EFA;&#x7684;&#x4E34;&#x65F6;&#x5BF9;&#x8C61;&#xFF1B;</li>
+</ul>
+<p>&#x5224;&#x65AD;&#x4E00;&#x4E2A;&#x503C;&#x662F;&#x5DE6;&#x503C;&#x8FD8;&#x662F;&#x53F3;&#x503C;&#xFF0C;&#x6700;&#x6709;&#x6548;&#x7684;&#x529E;&#x6CD5;&#x4E4B;&#x4E00;&#x5C31;&#x662F;&#x770B; <strong>&#x80FD;&#x5426;&#x5BF9;&#x8FD9;&#x4E2A;&#x503C;&#x8FDB;&#x884C;&#x53D6;&#x5740;&#x64CD;&#x4F5C;</strong>&#xFF0C;&#x5982;&#x679C;&#x53EF;&#x4EE5;&#xFF0C;&#x5219;&#x8BE5;&#x503C;&#x4E3A;&#x5DE6;&#x503C;&#xFF0C;&#x5426;&#x5219;&#x4E3A;&#x53F3;&#x503C;&#xFF1B;&#x53E6;&#x5916;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x540D;&#x79F0;&#x6765;&#x5224;&#x65AD;&#xFF0C;&#x6709;&#x540D;&#x79F0;&#x7684;&#x53D8;&#x91CF;&#x4E3A;&#x5DE6;&#x503C;&#xFF0C;&#x6CA1;&#x6709;&#x540D;&#x79F0;&#x7684;&#x53D8;&#x91CF;&#x4E3A;&#x53F3;&#x503C;&#x3002;</p>
+<p>&#x503C;&#x7C7B;&#x522B;&#x66F4;&#x8BE6;&#x7EC6;&#x7684;&#x8BF4;&#x660E;&#x53EF;&#x53C2;&#x8003;&#xFF1A;<a href="https://edwarddong1993.github.io/C++/value-categories.html" target="_blank">https://edwarddong1993.github.io/C++/value-categories.html</a></p>
+<h2 id="1-&#x5DE6;&#x503C;&#x5F15;&#x7528;">1 &#x5DE6;&#x503C;&#x5F15;&#x7528;</h2>
+<p>&#x5DE6;&#x503C;&#x5F15;&#x7528;&#x53EF;&#x4EE5;&#x7ED1;&#x5B9A;&#x5DE6;&#x503C;&#xFF0C;&#x4F46;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x7ED1;&#x5B9A;&#x53F3;&#x503C;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">int</span> a = <span class="hljs-number">42</span>;
+<span class="hljs-keyword">int</span> &amp;r1 = a;    <span class="hljs-comment">// ok</span>
+<span class="hljs-keyword">int</span> &amp;r2 = <span class="hljs-number">42</span>;   <span class="hljs-comment">// error</span>
+</code></pre>
+<p>const &#x7684;&#x5DE6;&#x503C;&#x5F15;&#x7528;&#x53EF;&#x4EE5;&#x7ED1;&#x5B9A;&#x53F3;&#x503C;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> &amp;r2 = <span class="hljs-number">42</span>; <span class="hljs-comment">// ok</span>
+</code></pre>
+<h2 id="2-&#x53F3;&#x503C;&#x5F15;&#x7528;">2 &#x53F3;&#x503C;&#x5F15;&#x7528;</h2>
+<p>&#x53F3;&#x503C;&#x5F15;&#x7528;&#x53EF;&#x4EE5;&#x7ED1;&#x5B9A;&#x53F3;&#x503C;&#xFF0C;&#x4F46;&#x4E0D;&#x80FD;&#x7ED1;&#x5B9A;&#x5DE6;&#x503C;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">int</span> a = <span class="hljs-number">42</span>;
+<span class="hljs-keyword">int</span> &amp;&amp;rr1 = a;      <span class="hljs-comment">// error</span>
+<span class="hljs-keyword">int</span> &amp;&amp;rr2 = <span class="hljs-number">42</span>;     <span class="hljs-comment">// ok</span>
+</code></pre>
+<p>&#x4E00;&#x4E2A;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x7ED1;&#x5B9A;&#x4E34;&#x65F6;&#x5BF9;&#x8C61;&#x7684;&#x4F8B;&#x5B50;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">class</span> test {
+<span class="hljs-keyword">public</span>:
+    test() = <span class="hljs-keyword">default</span>;
+    test(<span class="hljs-keyword">const</span> test &amp;other) {
+      <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;copy constructor&quot;</span> &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    }
+    test(test &amp;&amp;other) {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;move constructor&quot;</span> &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    }
+};
+
+<span class="hljs-function">test <span class="hljs-title">get_test_obj</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> test();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">auto</span> &amp;&amp;t = get_test_obj();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>&#x5982;&#x679C;&#x60F3;&#x8981;&#x4F7F;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x7ED1;&#x5B9A;&#x67D0;&#x4E2A;&#x5DE6;&#x503C;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; <code>std::move</code> &#x5C06;&#x5DE6;&#x503C;&#x5F3A;&#x5236;&#x53D8;&#x4E3A;&#x53F3;&#x503C;&#x5F15;&#x7528;&#xFF08;<code>std::move</code> &#x7684;&#x539F;&#x7406;&#x5728;&#x4E0B;&#x6587;&#x8FDB;&#x884C;&#x4ECB;&#x7ECD;&#xFF09;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">int</span> a = <span class="hljs-number">42</span>;
+<span class="hljs-keyword">int</span> &amp;&amp;rr = <span class="hljs-built_in">std</span>::move(a);    <span class="hljs-comment">// ok</span>
+</code></pre>
+<p>&#x7531;&#x4E8E;&#x53F3;&#x503C;&#x7ED1;&#x5B9A;&#x7684;&#x5BF9;&#x8C61;&#x90FD;&#x662F;&#x4E34;&#x65F6;&#x7684;&#xFF0C;&#x5728;&#x4F7F;&#x7528;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6240;&#x5F15;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#x72B6;&#x6001;&#x5982;&#x4E0B;&#xFF1A;</p>
+<ul>
+<li>&#x6240;&#x5F15;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#x5C06;&#x8981;&#x88AB;&#x9500;&#x6BC1;&#xFF1B;</li>
+<li>&#x8BE5;&#x5BF9;&#x8C61;&#x6CA1;&#x6709;&#x5176;&#x4ED6;&#x7528;&#x6237;&#xFF1B;</li>
+</ul>
+<p>&#x6240;&#x4EE5;&#xFF0C;<strong>&#x4F7F;&#x7528;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x4EE5;&#x63A5;&#x7BA1;&#x6240;&#x5F15;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x8D44;&#x6E90;</strong>&#x3002;</p>
+<blockquote>
+<p><strong>[info] For info</strong></p>
+<p>&#x53F3;&#x503C;&#x5F15;&#x7528;&#x6307;&#x5411;&#x5C06;&#x8981;&#x88AB;&#x9500;&#x6BC1;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x4E00;&#x6B21;&#xFF0C;&#x53EF;&#x4EE5;&#x4ECE;&#x7ED1;&#x5B9A;&#x5230;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#x4E2D;&#x7A83;&#x53D6;&#x8D44;&#x6E90;&#x3002;</p>
+</blockquote>
+<p>&#x7531;&#x6B64;&#xFF0C;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x5F15;&#x7533;&#x51FA;&#x4E86;&#x5982;&#x4E0B;&#x4E24;&#x4E2A;&#x529F;&#x80FD;&#xFF1A;</p>
+<ul>
+<li><strong>&#x79FB;&#x52A8;&#x8BED;&#x4E49;&#xFF08;Move Semantics&#xFF09;</strong></li>
+<li><strong>&#x5B8C;&#x7F8E;&#x8F6C;&#x53D1;&#xFF08;Perfect Forward&#xFF09;</strong></li>
+</ul>
+<h2 id="3-&#x5F15;&#x7528;&#x6298;&#x53E0;&#x89C4;&#x5219;">3 &#x5F15;&#x7528;&#x6298;&#x53E0;&#x89C4;&#x5219;</h2>
+<p>&#x5728;&#x4ECB;&#x7ECD;&#x79FB;&#x52A8;&#x8BED;&#x4E49;&#x548C;&#x5B8C;&#x7F8E;&#x8F6C;&#x53D1;&#x4E4B;&#x524D;&#xFF0C;&#x9700;&#x8981;&#x5148;&#x4ECB;&#x7ECD;&#x4E00;&#x4E0B; <strong>&#x5F15;&#x7528;&#x6298;&#x53E0;</strong>&#x3002;</p>
+<p><strong>&#x89C4;&#x5219; 1</strong>&#xFF1A;&#x5C06;&#x4E00;&#x4E2A;&#x5DE6;&#x503C;&#x4F20;&#x9012;&#x7ED9;&#x51FD;&#x6570;&#x7684;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x53C2;&#x6570;&#xFF0C;&#x4E14;&#x6B64;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x6307;&#x5411;&#x6A21;&#x677F;&#x7C7B;&#x578B;&#x53C2;&#x6570;&#xFF08;&#x5982; T&amp;&amp;&#xFF09;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x63A8;&#x65AD;&#x6A21;&#x677F;&#x7C7B;&#x578B;&#x53C2;&#x6570;&#x4E3A;&#x5B9E;&#x53C2;&#x7684;&#x5DE6;&#x503C;&#x5F15;&#x7528;&#x7C7B;&#x578B;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(T&amp;&amp;)</span></span>;
+<span class="hljs-keyword">int</span> i = <span class="hljs-number">42</span>;
+f(i);
+</code></pre>
+<p>&#x5F53;&#x8C03;&#x7528; <code>f(i)</code> &#x65F6;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x63A8;&#x65AD; T &#x7684;&#x7C7B;&#x578B;&#x4E3A; <code>int&amp;</code> &#x800C;&#x975E; <code>int</code>&#x3002;</p>
+<p><strong>&#x89C4;&#x5219; 2</strong>&#xFF1A;T &#x88AB;&#x63A8;&#x65AD;&#x4E3A; <code>int&amp;</code> &#x610F;&#x5473;&#x7740;&#x51FD;&#x6570; <code>f</code> &#x7684;&#x53C2;&#x6570;&#x5E94;&#x8BE5;&#x662F; <code>int&amp;</code> &#x7684;&#x53F3;&#x503C;&#x5F15;&#x7528;&#xFF0C;&#x4F46;&#x662F;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x5F15;&#x7528;&#x7684;&#x5F15;&#x7528;&#xFF08;&#x56E0;&#x4E3A;&#x5F15;&#x7528;&#x5E76;&#x4E0D;&#x662F;&#x5BF9;&#x8C61;&#xFF09;&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x91CC;&#x7ED9;&#x51FA;&#x89C4;&#x5219;2&#xFF1A;&#x5982;&#x679C;&#x95F4;&#x63A5;&#x7684;&#x521B;&#x5EFA;&#x4E86;&#x5F15;&#x7528;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x5F15;&#x7528;&#x4F1A;&#x6298;&#x53E0;&#x6210;&#x4E00;&#x4E2A;&#x666E;&#x901A;&#x7684;&#x5F15;&#x7528;&#xFF1A;</p>
+<ul>
+<li><code>X&amp; &amp;</code>&#xFF0C;<code>X&amp; &amp;&amp;</code>&#xFF0C;<code>X&amp;&amp; &amp;</code> &#x5C06;&#x6298;&#x53E0;&#x6210;&#x5DE6;&#x503C;&#x5F15;&#x7528; <code>X&amp;</code>;</li>
+<li><code>X&amp;&amp; &amp;&amp;</code> &#x5C06;&#x6298;&#x53E0;&#x6210;&#x4E3A;&#x53F3;&#x503C;&#x5F15;&#x7528; <code>X&amp;&amp;</code>;</li>
+</ul>
+<p>&#x4E0A;&#x8FF0;&#x4E24;&#x4E2A;&#x89C4;&#x5219;&#x5BFC;&#x81F4;&#x4E86;&#x4E24;&#x4E2A;&#x91CD;&#x8981;&#x7ED3;&#x679C;&#xFF1A;</p>
+<ul>
+<li>&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x662F;&#x4E00;&#x4E2A;&#x6307;&#x5411;&#x6A21;&#x677F;&#x53C2;&#x6570;&#x7684;&#x53F3;&#x503C;&#x5F15;&#x7528;&#xFF08;T&amp;&amp;&#xFF09;&#xFF0C;&#x5219;&#x5B83;&#x53EF;&#x4EE5;&#x88AB;&#x7ED1;&#x5B9A;&#x5230;&#x4E00;&#x4E2A;&#x5DE6;&#x503C;&#xFF1B;</li>
+<li>&#x5982;&#x679C;&#x5B9E;&#x53C2;&#x662F;&#x4E00;&#x4E2A;&#x5DE6;&#x503C;&#xFF0C;&#x5219;&#x63A8;&#x65AD;&#x51FA;&#x7684;&#x6A21;&#x677F;&#x5B9E;&#x53C2;&#x5C06;&#x4F1A;&#x662F;&#x4E00;&#x4E2A;&#x5DE6;&#x503C;&#x5F15;&#x7528;&#xFF0C;&#x4E14;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x5C06;&#x88AB;&#x5B9E;&#x4F8B;&#x5316;&#x4E3A;&#x4E00;&#x4E2A;&#x666E;&#x901A;&#x7684;&#x5DE6;&#x503C;&#x5F15;&#x7528;&#x53C2;&#x6570;&#xFF08;T&amp;&#xFF09;&#xFF1B;</li>
+</ul>
+<blockquote>
+<p><strong>[info] For info</strong></p>
+<p>&#x5F15;&#x7528;&#x6298;&#x53E0;&#x53EA;&#x80FD;&#x7528;&#x4E8E;&#x95F4;&#x63A5;&#x521B;&#x5EFA;&#x7684;&#x5F15;&#x7528;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x5982; <strong>&#x7C7B;&#x578B;&#x522B;&#x540D;</strong> &#x6216;&#x8005; <strong>&#x6A21;&#x677F;&#x53C2;&#x6570;</strong>&#x3002;</p>
+</blockquote>
+<h2 id="4-&#x79FB;&#x52A8;&#x8BED;&#x4E49;">4 &#x79FB;&#x52A8;&#x8BED;&#x4E49;</h2>
+<p>&#x5728;&#x8FD9;&#x91CC;&#x7EE7;&#x7EED;&#x770B;&#x4E00;&#x4E0B; <code>std::move</code> &#x7684;&#x5B9E;&#x73B0;&#xFF0C;&#x4E8B;&#x5B9E;&#x4E0A; <code>std::move</code> &#x552F;&#x4E00;&#x7684;&#x529F;&#x80FD;&#x662F;&#x5C31;&#x662F;&#x628A;&#x8F93;&#x5165;&#x7684;&#x53C2;&#x6570;&#x5F3A;&#x5236;&#x8F6C;&#x5316;&#x4E3A;&#x53F3;&#x503C;&#x5F15;&#x7528;&#xFF0C;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-cpp">  <span class="hljs-comment">/**
+   *  @brief  Convert a value to an rvalue.
+   *  @param  __t  A thing of arbitrary type.
+   *  @return The parameter cast to an rvalue-reference to allow moving it.
+  */</span>
+  <span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;
+    <span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">typename</span> <span class="hljs-built_in">std</span>::remove_reference&lt;_Tp&gt;::<span class="hljs-function">type&amp;&amp;
+    <span class="hljs-title">move</span><span class="hljs-params">(_Tp&amp;&amp; __t)</span> <span class="hljs-keyword">noexcept</span>
+    </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">typename</span> <span class="hljs-built_in">std</span>::remove_reference&lt;_Tp&gt;::type&amp;&amp;&gt;(<span class="hljs-keyword">__t</span>); }
+</code></pre>
+<p>&#x5982;&#x679C;&#x8F93;&#x5165;&#x7684;&#x53C2;&#x6570;&#x662F;&#x5DE6;&#x503C;&#xFF0C;&#x7ECF;&#x8FC7;&#x5F15;&#x7528;&#x6298;&#x53E0;&#x540E;&#x4F1A;&#x53D8;&#x6210;&#x5DE6;&#x503C;&#x5F15;&#x7528;&#xFF0C;&#x800C; <code>std::remove_reference&lt;_Tp&gt;::type&amp;&amp;&gt;</code> &#x64CD;&#x4F5C;&#x4F1A;&#x5C06;&#x5176;&#x7C7B;&#x578B;&#x53D8;&#x6210;&#x4E00;&#x4E2A;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x5E76;&#x8FD4;&#x56DE;&#x3002;</p>
+<p>&#x79FB;&#x52A8;&#x8BED;&#x4E49;&#x8FD8;&#x53EF;&#x4EE5;&#x4E3A;&#x7C7B;&#x5B9A;&#x4E49;&#x79FB;&#x52A8;&#x6784;&#x9020;&#x51FD;&#x6570;&#xFF08;move constructor&#xFF09;&#x548C;&#x79FB;&#x52A8;&#x8D4B;&#x503C;&#xFF08;move assignment&#xFF09;&#x8FD0;&#x7B97;&#x7B26;&#xFF1A;</p>
+<pre><code class="lang-cpp">X(X&amp;&amp;);
+X&amp; <span class="hljs-keyword">operator</span>=(X&amp;&amp;);
+</code></pre>
+<blockquote>
+<p><strong>[info] For info</strong></p>
+<p>&#x4E0A;&#x8FF0;&#x4E2D;&#x5165;&#x53C2;&#x5747;&#x4E3A;&#x53F3;&#x503C;&#x5F15;&#x7528;&#xFF0C;&#x8868;&#x793A;&#x8BE5;&#x5165;&#x53C2;&#x4E2D;&#x7684;&#x8D44;&#x6E90;&#x53EF;&#x4EE5;&#x88AB;&#x201C;&#x7A83;&#x53D6;&#x201D;&#x8D70;&#xFF0C;&#x5B9E;&#x73B0;&#x8D44;&#x6E90;&#x7684;&#x79FB;&#x52A8;&#xFF0C;&#x53D6;&#x4EE3;&#x590D;&#x5236;&#x64CD;&#x4F5C;&#xFF0C;&#x907F;&#x514D;&#x4E86;&#x8D44;&#x6E90;&#x6D88;&#x8017;&#xFF0C;&#x800C;&#x7531;&#x4E8E;&#x8F93;&#x5165;&#x53C2;&#x6570;&#x4E2D;&#x5305;&#x542B;&#x7684;&#x503C;&#x53EF;&#x80FD;&#x5DF2;&#x7ECF;&#x88AB;&#x79FB;&#x52A8;&#x8D70;&#x4E86;&#xFF0C;&#x540E;&#x7EED;&#x4E0D;&#x5E94;&#x5F53;&#x518D;&#x4F7F;&#x7528;&#x8BE5;&#x53D8;&#x91CF;&#x3002;</p>
+</blockquote>
+<h2 id="5-&#x5B8C;&#x7F8E;&#x8F6C;&#x53D1;">5 &#x5B8C;&#x7F8E;&#x8F6C;&#x53D1;</h2>
+<p>&#x67D0;&#x4E9B;&#x51FD;&#x6570;&#x9700;&#x8981;&#x5C06;&#x5B9E;&#x53C2;&#x8FDE;&#x540C;&#x7C7B;&#x578B;&#x4E0D;&#x53D8;&#x7684;&#x8F6C;&#x53D1;&#x7ED9;&#x5176;&#x5B83;&#x51FD;&#x6570;&#xFF0C;&#x9700;&#x8981;&#x4FDD;&#x6301;&#x88AB;&#x8F6C;&#x53D1;&#x7684;&#x5B9E;&#x53C2;&#x7684;&#x6240;&#x6709;&#x6027;&#x8D28;&#xFF0C;&#x5305;&#x62EC;&#x662F;&#x5426;&#x4E3A; const &#x4EE5;&#x53CA;&#x5DE6;&#x503C;&#x8FD8;&#x662F;&#x53F3;&#x503C;&#x3002;</p>
+<p><strong>step 1</strong></p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> F, tyename T1, <span class="hljs-keyword">typename</span> T2&gt;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">flip</span><span class="hljs-params">(F f, T1 t1, T2 t2)</span> </span>{
+    f(t2, t1);
+}
+</code></pre>
+<p>&#x5982;&#x679C;&#x51FD;&#x6570; <code>f</code> &#x7684;&#x53C2;&#x6570;&#x4E3A;&#x5F15;&#x7528;&#xFF0C;&#x5219;&#x4F1A;&#x51FA;&#x73B0;&#x95EE;&#x9898;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> v1, <span class="hljs-keyword">int</span> &amp; v2)</span> </span>{
+    <span class="hljs-comment">//...</span>
+}
+</code></pre>
+<p>&#x5982;&#x679C;&#x901A;&#x8FC7; <code>flip</code> &#x8C03;&#x7528;&#xFF0C;&#x5C31;&#x4E0D;&#x4F1A;&#x6539;&#x53D8;&#x5B9E;&#x53C2;&#x7684;&#x503C;&#x3002;</p>
+<p><strong>step 2</strong></p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> F, tyename T1, <span class="hljs-keyword">typename</span> T2&gt;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">flip</span><span class="hljs-params">(F f, T1 &amp;&amp;t1, T2 &amp;&amp;t2)</span> </span>{
+    f(t2, t1);
+}
+</code></pre>
+<p>&#x901A;&#x8FC7;&#x5F15;&#x7528;&#x6298;&#x53E0;&#xFF0C;&#x53EF;&#x4EE5;&#x4FDD;&#x6301;&#x5B9E;&#x53C2;&#x7684;&#x5DE6;&#x503C;&#x53F3;&#x503C;&#x5C5E;&#x6027;&#xFF0C;&#x4F46;&#x4E0D;&#x80FD;&#x4F20;&#x9012;&#x53F3;&#x503C;&#x5F15;&#x7528;&#x53C2;&#x6570;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;&amp;i, <span class="hljs-keyword">int</span> &amp;j)</span> </span>{
+    <span class="hljs-comment">//...</span>
+}
+</code></pre>
+<p>&#x4F8B;&#x5982;&#x8C03;&#x7528; <code>flip(f, i, 42)</code> &#x65F6;&#xFF0C;&#x5728; <code>flip</code> &#x51FD;&#x6570;&#x5185;&#x90E8; <code>t2</code> &#x4E3A;&#x53D8;&#x91CF;&#xFF08;&#x5DE6;&#x503C;&#x8868;&#x8FBE;&#x5F0F;&#xFF09;&#xFF0C;&#x4E0D;&#x80FD;&#x4ECE;&#x5DE6;&#x503C;&#x5B9E;&#x4F8B;&#x5316;&#x4E3A;&#x53F3;&#x503C;&#x3002;</p>
+<p><strong>step 3</strong></p>
+<p>&#x4F7F;&#x7528; <code>std::forward</code>&#xFF0C;&#x80FD;&#x4FDD;&#x6301;&#x539F;&#x59CB;&#x53C2;&#x6570;&#x7C7B;&#x578B;&#x4EE5;&#x53CA;&#x76F8;&#x5E94;&#x7684;&#x5C5E;&#x6027;&#xFF0C;&#x5176;&#x6E90;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-cpp">  <span class="hljs-comment">/**
+   *  @brief  Forward an lvalue.
+   *  @return The parameter cast to the specified type.
+   *
+   *  This function is used to implement &quot;perfect forwarding&quot;.
+   */</span>
+  <span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;
+    <span class="hljs-keyword">constexpr</span> _<span class="hljs-function">Tp&amp;&amp;
+    <span class="hljs-title">forward</span><span class="hljs-params">(<span class="hljs-keyword">typename</span> <span class="hljs-built_in">std</span>::remove_reference&lt;_Tp&gt;::type&amp; __t)</span> <span class="hljs-keyword">noexcept</span>
+    </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;_Tp&amp;&amp;&gt;(<span class="hljs-keyword">__t</span>); }
+
+  <span class="hljs-comment">/**
+   *  @brief  Forward an rvalue.
+   *  @return The parameter cast to the specified type.
+   *
+   *  This function is used to implement &quot;perfect forwarding&quot;.
+   */</span>
+  <span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;
+    <span class="hljs-keyword">constexpr</span> _<span class="hljs-function">Tp&amp;&amp;
+    <span class="hljs-title">forward</span><span class="hljs-params">(<span class="hljs-keyword">typename</span> <span class="hljs-built_in">std</span>::remove_reference&lt;_Tp&gt;::type&amp;&amp; __t)</span> <span class="hljs-keyword">noexcept</span>
+    </span>{
+      <span class="hljs-keyword">static_assert</span>(!<span class="hljs-built_in">std</span>::is_lvalue_reference&lt;_Tp&gt;::value, <span class="hljs-string">&quot;template argument&quot;</span>
+            <span class="hljs-string">&quot; substituting _Tp is an lvalue reference type&quot;</span>);
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;_Tp&amp;&amp;&gt;(<span class="hljs-keyword">__t</span>);
+    }
+</code></pre>
+<p><code>std::forward</code> &#x63D0;&#x4F9B;&#x5DE6;&#x503C;&#x548C;&#x53F3;&#x503C;&#x4E24;&#x4E2A;&#x63A5;&#x53E3;&#xFF0C;&#x5206;&#x522B;&#x8FD4;&#x56DE;&#x5176;&#x76F8;&#x5E94;&#x7684;&#x6298;&#x53E0;&#x5F15;&#x7528;&#xFF0C;&#x4FDD;&#x8BC1;&#x8F6C;&#x53D1;&#x7684;&#x6027;&#x8D28;&#x4E0D;&#x53D8;&#xFF0C;&#x53E6;&#x5916;&#xFF0C;<code>std::forward</code> &#x5FC5;&#x987B;&#x901A;&#x8FC7;&#x663E;&#x793A;&#x6A21;&#x677F;&#x5B9E;&#x53C2;&#x6765;&#x8C03;&#x7528;&#xFF0C;&#x6700;&#x7EC8;&#x8F6C;&#x53D1;&#x51FD;&#x6570;&#x53EF;&#x4FEE;&#x6539;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> F, tyename T1, <span class="hljs-keyword">typename</span> T2&gt;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">flip</span><span class="hljs-params">(F f, T1 &amp;&amp;t1, T2 &amp;&amp;t2)</span> </span>{
+    f(<span class="hljs-built_in">std</span>::forward&lt;T2&gt;t2, <span class="hljs-built_in">std</span>::forward&lt;T1&gt;(t1));
+}
+</code></pre>
+<h2 id="&#x53C2;&#x8003;">&#x53C2;&#x8003;</h2>
+<ul>
+<li><a href="https://blog.csdn.net/xhtchina/article/details/120619910" target="_blank">https://blog.csdn.net/xhtchina/article/details/120619910</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/335994370" target="_blank">https://zhuanlan.zhihu.com/p/335994370</a></li>
+<li>&#x300A;C++ primer&#x300B;</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="value-categories.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 值类别">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"右值引用","level":"1.2.3","depth":2,"previous":{"title":"值类别","level":"1.2.2","depth":2,"path":"C++/value-categories.md","ref":"C++/value-categories.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-search","back-to-top-button","expandable-chapters-small","code","-lunr","search-pro","splitter","auto-scroll-table","emphasize","alerts"],"ignores":["_book","node_modules"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"emphasize":{},"splitter":{},"search-pro":{},"auto-scroll-table":{},"code":{"copyButtons":true},"fontsettings":{"theme":"sepia","family":"serif","size":1},"highlight":{},"back-to-top-button":{},"alerts":{},"expandable-chapters-small":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Edward Dong","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"disableTitleFormatting":true,"variables":{},"title":"C++ zero","gitbook":"*"},"file":{"path":"C++/rvalue-reference.md","mtime":"2024-02-12T12:45:54.788Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-02-12T12:46:38.136Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters-small/expandable-chapters-small.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-pro/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-auto-scroll-table/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-alerts/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
