@@ -13,7 +13,13 @@
 		"emphasize",
 		"alerts"
 	],
-	"pluginsConfig": {},
+	"pluginsConfig": {
+		"fontsettings": {
+			"theme": "sepia",
+			"family": "serif",
+			"size": 1
+		}
+	},
 	"ignores": [
 		"_book",
 		"node_modules"
